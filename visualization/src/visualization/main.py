@@ -10,20 +10,19 @@ def load_from_csv(filename):
 
 
 def plot(df):
+    plt.rcParams["font.family"] = "JetBrains Mono"
     plt.figure(0)
-    plt.title("Benchmark")
+    plt.title("String vs StringBuffer Benchmark")
     print(df)
-    # group by type
-    groups = df.groupby("type")
-    for name, group in groups:
-        plt.plot(
-            group["x"],
-            group["y"],
-            label=name,
-        )
-    plt.xlabel("loop")
-    plt.ylabel("time (ms)")
+    # Plot
+    for name, group in df.groupby("type"):
+        plt.plot(group.index.get_level_values(0), group["time"], label=name)
+
+    plt.xlabel(r"iteration count (${N}$)")
+    plt.ylabel(r"time (${ms}$)")
+    plt.grid()
     plt.legend()
+    plt.minorticks_on()
     # save to file
     plt.savefig(
         "benchmark.png",
