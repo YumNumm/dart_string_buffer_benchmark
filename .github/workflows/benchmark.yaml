@@ -25,7 +25,7 @@ jobs:
       - name: Install python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.10
+          python-version: "3.11.3"
       - name: Install dependencies
         run: pip install -r ./visualization/requirements-dev.lock
 
