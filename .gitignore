@@ -26,7 +26,7 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 
-out
+/out
 .DS_Store
 benchmark.csv
 benchmark.html
