@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 class StringBufferBenchmark {
   Future<void> run({int max = 1000}) async {
     final results = <BenchmarkResult>[];
-    for (var i = 1; i <= max; i *= 2) {
+    final step = max ~/ 100;
+    for (var i = 1; i <= max; i += step) {
       results
         ..add(_runBenchmark(i, BenchmarkType.string))
         ..add(_runBenchmark(i, BenchmarkType.stringBuffer));
@@ -11,6 +13,13 @@ class StringBufferBenchmark {
     for (final result in results) {
       print('${result.type}, ${result.loop}, ${result.time}ms');
     }
+    // output as csv
+    final csv = [
+      'type,x,y',
+      ...results.map((e) => '${e.type},${e.loop},${e.time}'),
+    ].join('\n');
+    final file = File('benchmark.csv');
+    await file.writeAsString(csv);
   }
 
   BenchmarkResult _runBenchmark(int loop, BenchmarkType type) {
@@ -20,6 +29,7 @@ class StringBufferBenchmark {
       case BenchmarkType.string:
         var buffer = '';
         for (var i = 0; i < loop; i++) {
+          // ignore: use_string_buffers
           buffer += random.nextInt(10).toString();
         }
         final _ = buffer;

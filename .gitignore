@@ -25,3 +25,9 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+out
+.DS_Store
+benchmark.csv
+benchmark.html
+benchmark.png

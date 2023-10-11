@@ -1,0 +1,44 @@
+name: Benchmark
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetch flutter config
+        uses: kuhnroyal/flutter-fvm-config-action@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - name: Install dependencies
+        run: pip install -r ./visualization/requirements-dev.lock
+
+      - name: Run benchmark
+        run: |
+          dart compile exe ./bin/dart_string_buffer_benchmark.dart -o ./out
+          ./out
+
+      - name: Visualize benchmark
+        run: python ./visualization/src/visualization/main.py
+
+      - name: Archive  benchmark
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmark
+          path: ./benchmark.html

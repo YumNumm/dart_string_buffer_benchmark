@@ -1,0 +1,25 @@
+[project]
+name = "visualization"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "YumNumm", email = "onory0917@gmail.com" }
+]
+dependencies = [
+    "numpy>=1.26.0",
+    "matplotlib>=3.8.0",
+    "pandas>=2.1.1",
+]
+readme = "README.md"
+requires-python = ">= 3.11"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
