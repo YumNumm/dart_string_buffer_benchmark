@@ -22,12 +22,14 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      - name: Install python
-        uses: actions/setup-python@v2
+      - name: Install Rye
+        uses: baptiste0928/cargo-install@v2
         with:
-          python-version: "3.11.3"
-      - name: Install dependencies
-        run: pip install -r ./visualization/requirements-dev.lock
+          crate: rye
+          git: https://github.com/mitsuhiko/rye
+          branch: main
+      - name: Install Dependencies
+        run: rye sync
 
       - name: Run benchmark
         run: |
@@ -35,7 +37,7 @@ jobs:
           ./out
 
       - name: Visualize benchmark
-        run: python ./visualization/src/visualization/main.py
+        run: rye run python ./visualization/src/visualization/main.py
 
       - name: Archive  benchmark
         uses: actions/upload-artifact@v2
