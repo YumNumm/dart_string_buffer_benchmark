@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
 
+
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
@@ -45,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: benchmark
-          path: ./visualization/benchmark.html
+          path: ./visualization/benchmark.png
