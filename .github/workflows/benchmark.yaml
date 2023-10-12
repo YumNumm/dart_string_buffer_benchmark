@@ -39,7 +39,7 @@ jobs:
       - name: Visualize benchmark
         run: |
           mv ./benchmark.csv ./visualization/benchmark.csv
-          cd visualization && rye run python ./visualization/src/visualization/main.py
+          cd visualization && rye run python ./src/visualization/main.py
 
       - name: Archive  benchmark
         uses: actions/upload-artifact@v2
