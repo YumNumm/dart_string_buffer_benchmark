@@ -43,6 +43,12 @@ void main(List<String> arguments) async {
       'visualize',
       abbr: 'v',
       help: 'Visualize benchmark result. Output png file will be created.',
+    )
+    // stop before end of benchmark
+    ..addFlag(
+      'debug',
+      abbr: 'd',
+      help: 'Debug mode (stop before end of benchmark)',
     );
 
   final results = parser.parse(arguments);
