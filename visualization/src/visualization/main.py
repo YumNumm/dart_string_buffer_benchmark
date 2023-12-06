@@ -41,6 +41,15 @@ def generate_html():
         <head>
             <title>Benchmark</title>
         </head>
+        <style>
+            img {{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                height: auto;
+            }}
+        </style>
         <body>
             <h1>Benchmark</h1>
             {}
