@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import base64
+import scipy.optimize as optimize
+import sklearn.metrics as metrics
 
 
 def load_from_csv(filename):
@@ -14,9 +16,41 @@ def plot(df):
     plt.figure(0)
     plt.title("String vs StringBuffer Benchmark")
     print(df)
+    # 同じloopの場合 平均を取る
+    df = df.groupby(["type", "loop"]).mean()
     # Plot
-    for name, group in df.groupby("type"):
-        plt.plot(group.index.get_level_values(0), group["time"], label=name)
+    # x軸はloopの値
+    # y軸はtimeの値
+    # typeごとにplot
+    popts = []
+    for type in df.index.levels[0]:
+        x = df.loc[type].index
+        y = df.loc[type]["time"]
+        # 近似直線
+        x = np.array(x)
+        y = np.array(y)
+
+        def f(x, a, b):
+            # 切片0の2次関数にフィッティングさせる
+            return a * x**2 + b * x
+
+        popt, _ = optimize.curve_fit(f, x, y)
+
+        # 近似曲線の算出
+        approximation_y = f(x, *popt)
+
+        # 近似曲線の決定係数
+        # TODO(YumNumm): なんか違う気がするので また今度
+        # r2 = metrics.r2_score(y, approximation_y)
+        # print(type, "決定係数 (R2)", r2)
+
+        # 近似式
+        print(type, "近似式", f"{popt[0]:f}x^2 + {popt[1]:f}x")
+
+        # 近似曲線のplot
+        plt.plot(x, approximation_y, label=type + " (fit)", linewidth=0.5)
+        # plot
+        plt.plot(x, y, label=type)
 
     plt.xlabel(r"iteration count (${N}$)")
     plt.ylabel(r"time (${ms}$)")
@@ -26,7 +60,7 @@ def plot(df):
     # save to file
     plt.savefig(
         "benchmark.png",
-        dpi=600,
+        dpi=300,
     )
 
 

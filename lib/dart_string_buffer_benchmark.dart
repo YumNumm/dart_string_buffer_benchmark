@@ -13,10 +13,11 @@ class StringBufferBenchmark {
     };
 
     final results = <BenchmarkResult>[];
-    for (var i = 1; i <= args.max; i += stepCount) {
+    for (var i = 1; i <= args.step; i += 1) {
+      print('step: $i / ${args.step} (${i * stepCount} / ${args.max})');
       for (final type in types) {
         final result = _runBenchmark(
-          i,
+          i * stepCount,
           type,
           args.repeat,
         );
@@ -46,16 +47,20 @@ class StringBufferBenchmark {
     final stopwatch = Stopwatch()..start();
     switch (type) {
       case BenchmarkType.string:
-        // ignore: unused_local_variable
-        var buffer = '';
-        for (var i = 0; i < loop; i++) {
-          // ignore: use_string_buffers
-          buffer += 'a';
+        for (var i = 0; i < repeat; i++) {
+          // ignore: unused_local_variable
+          var buffer = '';
+          for (var v = 0; v < loop; v++) {
+            // ignore: use_string_buffers
+            buffer += 'a';
+          }
         }
       case BenchmarkType.stringBuffer:
-        final buffer = StringBuffer();
-        for (var i = 0; i < loop; i++) {
-          buffer.write('a');
+        for (var i = 0; i < repeat; i++) {
+          final buffer = StringBuffer();
+          for (var v = 0; v < loop; v++) {
+            buffer.write('a');
+          }
         }
       case BenchmarkType.all:
         throw UnimplementedError();
@@ -63,7 +68,7 @@ class StringBufferBenchmark {
     stopwatch.stop();
     return BenchmarkResult(
       loop,
-      stopwatch.elapsedMicroseconds / 1000 / repeat,
+      (stopwatch.elapsedMicroseconds / 1000) / repeat,
       type,
     );
   }
@@ -96,7 +101,6 @@ class BenchmarkParameter {
     required this.output,
     required this.type,
     required this.visualize,
-    required this.debug,
   });
 
   factory BenchmarkParameter.fromResults(ArgResults results) {
@@ -107,7 +111,6 @@ class BenchmarkParameter {
     final output = results['output'] as String;
     final type = results['type'] as String;
     final visualize = results['visualize'] as bool;
-    final debug = results['debug'] as bool;
     return BenchmarkParameter(
       help: help,
       max: max,
@@ -118,7 +121,6 @@ class BenchmarkParameter {
         (e) => e.name == type,
       ),
       visualize: visualize,
-      debug: debug,
     );
   }
   final bool help;
@@ -128,5 +130,4 @@ class BenchmarkParameter {
   final String output;
   final BenchmarkType type;
   final bool visualize;
-  final bool debug;
 }
