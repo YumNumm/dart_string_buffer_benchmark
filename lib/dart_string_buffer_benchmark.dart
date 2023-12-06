@@ -46,7 +46,7 @@ class StringBufferBenchmark {
   ) {
     final stopwatch = Stopwatch()..start();
     switch (type) {
-      case BenchmarkType.string:
+      case BenchmarkType.string1:
         for (var i = 0; i < repeat; i++) {
           // ignore: unused_local_variable
           var buffer = '';
@@ -55,11 +55,15 @@ class StringBufferBenchmark {
             buffer += 'a';
           }
         }
-      case BenchmarkType.stringBuffer:
+      case BenchmarkType.string64:
         for (var i = 0; i < repeat; i++) {
-          final buffer = StringBuffer();
+          // ignore: unused_local_variable
+          var buffer = '';
           for (var v = 0; v < loop; v++) {
-            buffer.write('a');
+            // pubspec.yamlのSHA256
+            // ignore: use_string_buffers
+            buffer +=
+                '783754a2904a9702470e9d0a850ce85cb89447b729fdc33428d27d58cbab3e5d';
           }
         }
       case BenchmarkType.all:
@@ -86,8 +90,8 @@ class BenchmarkResult {
 }
 
 enum BenchmarkType {
-  string,
-  stringBuffer,
+  string1,
+  string64,
   all,
   ;
 }
